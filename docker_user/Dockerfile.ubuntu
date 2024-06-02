@@ -1,0 +1,9 @@
+FROM ubuntu:latest
+RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true && apt-get -q update && apt-get -q -y install git pkg-config wget tar lsb-release software-properties-common gnupg && \
+    wget https://apt.llvm.org/llvm.sh && chmod u+x llvm.sh && ./llvm.sh 17 && \
+    rm -r /var/lib/apt/lists/*
+RUN wget -q https://github.com/Vinz2008/C./releases/download/v0.1.0-alpha/cpoint-bin-release-linux.tar.gz && \
+    tar -xvf cpoint-bin-release-linux.tar.gz -C / && rm cpoint-bin-release-linux.tar.gz
+    
+
+CMD ["/bin/bash"]
