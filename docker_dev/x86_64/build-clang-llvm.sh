@@ -38,6 +38,7 @@ INC="/build/cpoint-root/include:/usr/include"
       -DLLVM_ENABLE_PROJECTS="clang;lld;compiler-rt;bolt" \
       -DC_INCLUDE_DIRS="$INC"
 
+# replace by ninja ?
 make -j$(nproc)
 make install
 
