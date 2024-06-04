@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libssl-dev \
   pkg-config \
   xz-utils \
+  wget \
   clang \
   && rm -rf /var/lib/apt/lists/*
 
@@ -22,6 +23,7 @@ RUN mkdir -p /cross-compiled-root
 RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/clang+llvm-17.0.6-aarch64-linux-gnu.tar.xz && \
     tar -xvf clang+llvm-17.0.6-aarch64-linux-gnu.tar.xz -C /cross-compiled-root && rm clang+llvm-17.0.6-aarch64-linux-gnu.tar.xz
 
+WORkDIR /build
 
 RUN git clone https://github.com/Vinz2008/C.
 
@@ -29,4 +31,4 @@ WORKDIR /build/C.
     
 RUN git submodule update --init --recursive
 
-#RUN CC="clang -target aarch64-unknown-linux-gnu" make -j$(nproc)
+#RUN CC="clang -target aarch64-unknown-linux-gnu" CXX="clang++ -target aarch64-unknown-linux-gnu" make -j$(nproc)

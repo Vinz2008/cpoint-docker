@@ -23,22 +23,35 @@ RUN yum upgrade -y && \
       xz \
       which \
       libtool \
+      autoconf \
+      automake \
+      m4 \
+      ncurses-libs \
+      zstd \
+      libzstd \
       zlib-devel.i686 \
       zlib-devel.x86_64 \
       && yum clean all
 
+# fix name for wrong version of libtinfo (ncurses-libs). Recompile it manually ?
+RUN ln -sf /usr/lib64/libtinfo.so.6 /usr/lib64/libtinfo.so.5
+
+
 RUN mkdir -p /build/cpoint-root
 
-ENV PATH=/build/cpoint-root:$PATH
+ENV PATH=/build/cpoint-root/bin:$PATH
 ENV LD_LIBRARY_PATH=/build/cpoint-root/lib64:/build/cpoint-root/lib32:/build/cpoint-root/lib:$LD_LIBRARY_PATH
 # ENV PKG_CONFIG_PATH=/build/cpoint-root/lib/pkgconfig
 
 COPY ./build-gcc.sh /build
-RUN ./build-gcc.sh && yum remove -y gcc gcc-c++
+RUN ./build-gcc.sh 
+# && yum remove -y gcc gcc-c++
 
 # maybe build it manually ?
-RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz && \
-    tar -xvf clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz -C /usr && rm clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz
+#RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz && \
+#    tar -xvf clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz -C /usr --strip-components=1 && rm clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz
+
+RUN ./build-clang-llvm.sh
 
 RUN git clone https://github.com/Vinz2008/C.
 
