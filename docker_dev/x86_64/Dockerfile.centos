@@ -34,7 +34,7 @@ RUN yum upgrade -y && \
       && yum clean all
 
 # fix name for wrong version of libtinfo (ncurses-libs). Recompile it manually ?
-RUN ln -sf /usr/lib64/libtinfo.so.6 /usr/lib64/libtinfo.so.5
+RUN ln -sf /usr/lib64/libtinfo.so.5 /usr/lib64/libtinfo.so.6
 
 
 RUN mkdir -p /build/cpoint-root
