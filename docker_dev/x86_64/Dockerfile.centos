@@ -18,6 +18,8 @@ RUN yum upgrade -y && \
       make \
       pkgconfig \
       python3 \
+      openssl \
+      openssl-devel \
       unzip \
       wget \
       xz \
@@ -39,9 +41,11 @@ RUN ln -sf /usr/lib64/libtinfo.so.5 /usr/lib64/libtinfo.so.6
 
 RUN mkdir -p /build/cpoint-root
 
-ENV PATH=/build/cpoint-root/bin:$PATH
-ENV LD_LIBRARY_PATH=/build/cpoint-root/lib64:/build/cpoint-root/lib32:/build/cpoint-root/lib:$LD_LIBRARY_PATH
+#ENV PATH=/build/cpoint-root/bin:$PATH
+#ENV LD_LIBRARY_PATH=/build/cpoint-root/lib64:/build/cpoint-root/lib32:/build/cpoint-root/lib:$LD_LIBRARY_PATH
 # ENV PKG_CONFIG_PATH=/build/cpoint-root/lib/pkgconfig
+
+RUN ls
 
 COPY ./build-gcc.sh /build
 RUN ./build-gcc.sh 
@@ -51,12 +55,22 @@ RUN ./build-gcc.sh
 #RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz && \
 #    tar -xvf clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz -C /usr --strip-components=1 && rm clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz
 
+COPY build-cmake.sh /build
+RUN ./build-cmake.sh
+
+COPY build-ninja.sh /build
+RUN ./build-ninja.sh
+
+COPY ./build-clang-llvm.sh /build
 RUN ./build-clang-llvm.sh
 
-RUN git clone https://github.com/Vinz2008/C.
+COPY ./install-tomlplusplus.sh /build
+RUN ./install-tomlplusplus.sh
 
-WORKDIR /build/C.
+# RUN git clone https://github.com/Vinz2008/C.
 
-RUN git submodule update --init --recursive
+# WORKDIR /build/C.
 
-#RUN make -j$(nproc)
+# RUN git submodule update --init --recursive
+
+#RUN CC="/build/cpoint-root/bin/gcc --sysroot=/build/cpoint-root" CXX="/build/cpoint-root/bin/g++ -L/build/cpoint-root/lib64 --sysroot=/build/cpoint-root" make

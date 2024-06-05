@@ -39,13 +39,14 @@ cd ../gcc-build
 # enable BOLT optimization of the C++ standard library,
 # which is included in librustc_driver.so
 ../gcc-$GCC/configure \
-    --prefix=/build/cpoint-root \
+    --prefix=/usr \
     --enable-languages=c,c++ \
     --disable-gnu-unique-object \
 #    --enable-cxx-flags='-fno-reorder-blocks-and-partition'
 make -j$(nproc)
 make install
-ln -sf gcc /bin/cc
+#ln -sf /usr/bin/gcc /bin/cc
+#ln -sf /usr/bin/gcc /usr/bin/cc
 
 cd ..
 rm -rf gcc-build
@@ -54,4 +55,4 @@ rm -rf gcc-$GCC
 # FIXME: clang doesn't find 32-bit libraries in /build/cpoint-root/lib,
 # but it does look all the way under /build/cpoint-root/lib/[...]/32,
 # so we can link stuff there to help it out.
-ln /build/cpoint-root/lib/*.{a,so} -rst /build/cpoint-root/lib/gcc/x86_64-pc-linux-gnu/$GCC/32/
+#ln /build/cpoint-root/lib/*.{a,so} -rst /build/cpoint-root/lib/gcc/x86_64-pc-linux-gnu/$GCC/32/
