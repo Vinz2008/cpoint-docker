@@ -20,8 +20,8 @@ exit 1
 
 # LLVM 17 requires CMake 3.20 or higher.
 # This script is not necessary for images using Ubuntu 22.04 or newer.
-CMAKE=3.20.3
-curl -L https://github.com/Kitware/CMake/releases/download/v$CMAKE/cmake-$CMAKE.tar.gz | tar xzf -
+source ./vars.sh
+#curl -L https://github.com/Kitware/CMake/releases/download/v$CMAKE/cmake-$CMAKE.tar.gz | tar xzf -
 
 mkdir cmake-build
 cd cmake-build

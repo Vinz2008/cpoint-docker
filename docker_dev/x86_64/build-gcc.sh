@@ -5,9 +5,9 @@
 set -ex
 
 # Note: in the future when bumping to version 10.1.0, also take care of the sed block below.
-GCC=9.5.0
+source ./vars.sh
 
-curl https://ftp.gnu.org/gnu/gcc/gcc-$GCC/gcc-$GCC.tar.xz | xzcat | tar xf -
+#curl https://ftp.gnu.org/gnu/gcc/gcc-$GCC/gcc-$GCC.tar.xz | xzcat | tar xf -
 cd gcc-$GCC
 
 # FIXME(#49246): Remove the `sed` below.

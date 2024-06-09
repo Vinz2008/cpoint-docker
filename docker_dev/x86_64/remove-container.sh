@@ -1,0 +1,1 @@
+../../shared_scripts/remove-container.sh

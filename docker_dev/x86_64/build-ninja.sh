@@ -1,10 +1,10 @@
 #!/bin/bash
 set -ex
 
-NINJA=1.12.1
+source ./vars.sh
 
-curl -L https://github.com/ninja-build/ninja/archive/refs/tags/v$NINJA.tar.gz | \
-  tar xzf -
+#curl -L https://github.com/ninja-build/ninja/archive/refs/tags/v$NINJA.tar.gz | \
+#  tar xzf -
 
 cd ninja-$NINJA
 

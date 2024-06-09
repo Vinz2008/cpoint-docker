@@ -35,6 +35,14 @@ RUN yum upgrade -y && \
       zlib-devel.x86_64 \
       && yum clean all
 
+
+COPY ./vars.sh /build
+
+COPY ./download_files.sh /build
+
+# download files
+RUN ./download_files.sh
+
 # fix name for wrong version of libtinfo (ncurses-libs). Recompile it manually ?
 RUN ln -sf /usr/lib64/libtinfo.so.5 /usr/lib64/libtinfo.so.6
 
@@ -45,15 +53,9 @@ RUN mkdir -p /build/cpoint-root
 #ENV LD_LIBRARY_PATH=/build/cpoint-root/lib64:/build/cpoint-root/lib32:/build/cpoint-root/lib:$LD_LIBRARY_PATH
 # ENV PKG_CONFIG_PATH=/build/cpoint-root/lib/pkgconfig
 
-RUN ls
-
 COPY ./build-gcc.sh /build
 RUN ./build-gcc.sh 
 # && yum remove -y gcc gcc-c++
-
-# maybe build it manually ?
-#RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz && \
-#    tar -xvf clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz -C /usr --strip-components=1 && rm clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz
 
 COPY build-cmake.sh /build
 RUN ./build-cmake.sh
@@ -67,10 +69,12 @@ RUN ./build-clang-llvm.sh
 COPY ./install-tomlplusplus.sh /build
 RUN ./install-tomlplusplus.sh
 
-# RUN git clone https://github.com/Vinz2008/C.
+RUN git clone https://github.com/Vinz2008/C.
 
-# WORKDIR /build/C.
+WORKDIR /build/C.
 
-# RUN git submodule update --init --recursive
+RUN git submodule update --init --recursive
 
-#RUN CC="/build/cpoint-root/bin/gcc --sysroot=/build/cpoint-root" CXX="/build/cpoint-root/bin/g++ -L/build/cpoint-root/lib64 --sysroot=/build/cpoint-root" make
+#RUN make
+
+#RUN CC="/build/cpoint-root/bin/gcc" CXX="/build/cpoint-root/bin/g++ -L/build/cpoint-root/lib64" make
