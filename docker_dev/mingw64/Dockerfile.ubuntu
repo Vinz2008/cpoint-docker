@@ -19,6 +19,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   mingw-w64 \
   ninja-build \
   cmake \
+  autoconf \
+  automake \
+  m4 \
+  libtool \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /build
@@ -33,15 +37,23 @@ RUN ./download-files.sh
 COPY ./install-tomlplusplus.sh /build
 RUN ./install-tomlplusplus.sh
 
-RUN ls
+#COPY ./build-cmake.sh /build
+#RUN ./build-cmake.sh
+
 COPY ./install-cmake-mingw.sh /build
 RUN ./install-cmake-mingw.sh
 
 COPY ./build-clang-llvm.sh /build
 RUN  ./build-clang-llvm.sh
 
+COPY ./build-gettext.sh /build
+RUN ./build-gettext.sh
+
 RUN git clone https://github.com/Vinz2008/C.
 
 WORKDIR /build/C.
     
 RUN git submodule update --init --recursive
+
+#RUN CC="clang -target x86_64-w64-mingw32" CXX="clang++ -target x86_64-w64-mingw32" TARGET=x86_64-w64-mingw32 make
+#RUN CC="x86_64-w64-mingw32-gcc" CXX="x86_64-w64-mingw32-c++" TARGET=x86_64-w64-mingw32 CMAKE=x86_64-w64-mingw32-cmake CMAKE_GC=TRUE make

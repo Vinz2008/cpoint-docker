@@ -33,8 +33,8 @@ cmake ../llvm \
     -DLLVM_TARGETS_TO_BUILD=X86 \
     -DLLVM_INCLUDE_BENCHMARKS=OFF \
     -DLLVM_INCLUDE_TESTS=OFF \
+    -DLLVM_INCLUDE_DOCS=OFF \
     -DLLVM_INCLUDE_EXAMPLES=OFF \
-    -DLLVM_BUILD_LLVM_DYLIB=ON \
     -DLLVM_ENABLE_PROJECTS="clang;lld;compiler-rt;bolt" \
     -DLLVM_BUILD_LLVM_DYLIB=ON \
     -DLLVM_LINK_LLVM_DYLIB=ON \
@@ -43,7 +43,6 @@ cmake ../llvm \
 #    -DCMAKE_CXX_COMPILER=/build/cpoint-root/bin/g++ \
 #    -DC_INCLUDE_DIRS="$INC"
 
-# replace by ninja ?
 ninja
 ninja install
 #ninja install-distribution

@@ -50,7 +50,6 @@ $TARGET-cmake ../llvm \
 #    -DCMAKE_CXX_COMPILER=/build/cpoint-root/bin/g++ \
 #    -DC_INCLUDE_DIRS="$INC"
 
-# replace by ninja ?
 ninja
 ninja install
 #ninja install-distribution
