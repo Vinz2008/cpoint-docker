@@ -26,7 +26,6 @@ cd clang-build
 cmake ../llvm \
     -G "Ninja" \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=/ \
     -DCOMPILER_RT_BUILD_SANITIZERS=OFF \
     -DCOMPILER_RT_BUILD_XRAY=OFF \
     -DCOMPILER_RT_BUILD_MEMPROF=OFF \
@@ -38,6 +37,7 @@ cmake ../llvm \
     -DLLVM_ENABLE_PROJECTS="clang;lld;compiler-rt;bolt" \
     -DLLVM_BUILD_LLVM_DYLIB=ON \
     -DLLVM_LINK_LLVM_DYLIB=ON \
+#    -DCMAKE_INSTALL_PREFIX=/ \
 #    -DCMAKE_INSTALL_PREFIX=/build/cpoint-root \
 #    -DCMAKE_C_COMPILER=/build/cpoint-root/bin/gcc \
 #    -DCMAKE_CXX_COMPILER=/build/cpoint-root/bin/g++ \

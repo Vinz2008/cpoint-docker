@@ -75,6 +75,6 @@ WORKDIR /build/C.
 
 RUN git submodule update --init --recursive
 
-#RUN make
+RUN make
 
 #RUN CC="/build/cpoint-root/bin/gcc" CXX="/build/cpoint-root/bin/g++ -L/build/cpoint-root/lib64" make
