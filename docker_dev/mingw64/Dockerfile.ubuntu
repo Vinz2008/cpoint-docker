@@ -37,9 +37,6 @@ RUN ./download-files.sh
 COPY ./install-tomlplusplus.sh /build
 RUN ./install-tomlplusplus.sh
 
-#COPY ./build-cmake.sh /build
-#RUN ./build-cmake.sh
-
 COPY ./install-cmake-mingw.sh /build
 RUN ./install-cmake-mingw.sh
 
