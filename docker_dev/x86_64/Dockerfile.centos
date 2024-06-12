@@ -46,9 +46,6 @@ RUN ./download_files.sh
 # fix name for wrong version of libtinfo (ncurses-libs). Recompile it manually ?
 RUN ln -sf /usr/lib64/libtinfo.so.5 /usr/lib64/libtinfo.so.6
 
-
-RUN mkdir -p /build/cpoint-root
-
 #ENV PATH=/build/cpoint-root/bin:$PATH
 #ENV LD_LIBRARY_PATH=/build/cpoint-root/lib64:/build/cpoint-root/lib32:/build/cpoint-root/lib:$LD_LIBRARY_PATH
 # ENV PKG_CONFIG_PATH=/build/cpoint-root/lib/pkgconfig
@@ -75,6 +72,15 @@ WORKDIR /build/C.
 
 RUN git submodule update --init --recursive
 
-RUN make
+ENV LD_LIBRARY_PATH /usr/local/lib:$LD_LIBRARY_PATH
+RUN ldconfig
 
+RUN make -j$(nproc) release
+
+RUN make create-release
+
+RUN cp cpoint-bin-release.tar.gz /build
+
+WORKDIR /build
+RUN rm -rf C. *.sh
 #RUN CC="/build/cpoint-root/bin/gcc" CXX="/build/cpoint-root/bin/g++ -L/build/cpoint-root/lib64" make
