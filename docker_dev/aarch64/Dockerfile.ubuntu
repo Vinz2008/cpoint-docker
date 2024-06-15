@@ -16,12 +16,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   xz-utils \
   wget \
   clang \
+  cmake \
+  gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu \
   && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /cross-compiled-root
+RUN mkdir -p /usr/aarch64-linux-gnu
 
 RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/clang+llvm-17.0.6-aarch64-linux-gnu.tar.xz && \
-    tar -xvf clang+llvm-17.0.6-aarch64-linux-gnu.tar.xz -C /cross-compiled-root && rm clang+llvm-17.0.6-aarch64-linux-gnu.tar.xz
+    tar -xvf clang+llvm-17.0.6-aarch64-linux-gnu.tar.xz -C /usr/aarch64-linux-gnu && rm clang+llvm-17.0.6-aarch64-linux-gnu.tar.xz
+
+COPY ./aarch64-linux-gnu-cmake /usr/bin
+COPY ./toolchain-aarch64-linux-gnu.cmake /usr/aarch64-linux-gnu
 
 WORkDIR /build
 
@@ -30,5 +35,7 @@ RUN git clone https://github.com/Vinz2008/C.
 WORKDIR /build/C.
     
 RUN git submodule update --init --recursive
+
+RUN CC="aarch64-linux-gnu-gcc" CXX="aarch64-linux-gnu-g++" TARGET=aarch64-linux-gnu CMAKE=aarch64-linux-gnu-cmake CMAKE_GC=TRUE make
 
 #RUN CC="clang -target aarch64-unknown-linux-gnu" CXX="clang++ -target aarch64-unknown-linux-gnu" make -j$(nproc)
