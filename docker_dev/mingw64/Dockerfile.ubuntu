@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   automake \
   m4 \
   libtool \
+  wine64 \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /build

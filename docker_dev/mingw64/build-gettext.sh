@@ -29,7 +29,8 @@ LDFLAGS="-lssp" ${ARCH}-configure \
       --disable-csharp \
       --enable-threads=posix \
       --without-emacs ..
-make -j$(nproc)
+make
+# make -j$(nproc)
 make install
 cd ../..
 rm -rf gettext-$GETTEXT
