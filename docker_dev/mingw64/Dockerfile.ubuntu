@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -23,12 +23,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   automake \
   m4 \
   libtool \
-  wine64 \
+  libmpfr-dev \
+  libmpc-dev \
+  gnupg \
   && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -pm755 /etc/apt/keyrings && \
+    wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key && \
+    wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources && \
+    dpkg --add-architecture i386 && apt-get update && apt-get -y install --no-install-recommends winehq-staging && rm -rf /var/lib/apt/lists/*
+
+
+  
 RUN mkdir -p /build
 
-WORkDIR /build
+WORKDIR /build
 
 COPY ./vars.sh /build
 
@@ -41,17 +50,30 @@ RUN ./install-tomlplusplus.sh
 COPY ./install-cmake-mingw.sh /build
 RUN ./install-cmake-mingw.sh
 
+COPY ./install-configure-mingw.sh /build
+RUN ./install-configure-mingw.sh
+
+COPY ./install-configure-mingw.sh /build
+RUN ./install-configure-mingw.sh
+
+# COPY ./build-mingw.sh /build
+# RUN ./build-mingw.sh
+
 COPY ./build-clang-llvm.sh /build
 RUN  ./build-clang-llvm.sh
 
-COPY ./build-gettext.sh /build
-RUN ./build-gettext.sh
+# COPY ./build-gettext.sh /build
+# RUN ./build-gettext.sh
 
-RUN git clone https://github.com/Vinz2008/C.
+RUN git clone https://github.com/Vinz2008/C. cpoint
 
 WORKDIR /build/C.
     
 RUN git submodule update --init --recursive
+
+ENV WINEPATH="/usr/x86_64-w64-mingw32/bin;/usr/x86_64-w64-mingw32/lib;/usr/lib/gcc/x86_64-w64-mingw32/13-posix/"
+
+# TODO : install xvfb and run it for wine headless
 
 #RUN CC="clang -target x86_64-w64-mingw32" CXX="clang++ -target x86_64-w64-mingw32" TARGET=x86_64-w64-mingw32 make
 #RUN CC="x86_64-w64-mingw32-gcc" CXX="x86_64-w64-mingw32-c++" TARGET=x86_64-w64-mingw32 CMAKE=x86_64-w64-mingw32-cmake CMAKE_GC=TRUE make

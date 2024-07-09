@@ -1,0 +1,32 @@
+FROM archlinux:base-devel
+
+RUN pacman-key --init
+RUN pacman-key --refresh-keys
+RUN pacman-key -u
+RUN pacman -Syu --noconfirm
+
+
+WORKDIR /tmp/yay-build
+
+RUN pacman -S --noconfirm --needed git base-devel && git clone https://aur.archlinux.org/yay.git /tmp/yay-build \
+ && useradd -m -G wheel builder && passwd -d builder && chown -R builder:builder /tmp/yay-build && echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
+ su - builder -c "cd /tmp/yay-build && makepkg -si --noconfirm" && rm -rf /tmp/yay-build
+
+RUN export PROCS=$(nproc); sed -i "s/#MAKEFLAGS=.*/MAKEFLAGS=\"-j${PROCS}\"/g" /etc/makepkg.conf
+
+RUN su - builder -c "yay -S mingw-w64-gcc mingw-w64-llvm mingw-w64-cmake mingw-w64-configure --noconfirm"
+ 
+
+
+RUN mkdir -p /build
+WORKDIR /build
+
+COPY ./vars.sh /build
+
+RUN source ./vars.sh && mkdir tomlplusplus && \
+cd tomlplusplus && \
+curl -L https://github.com/marzer/tomlplusplus/archive/refs/tags/v$TOMLPLUSPLUS.tar.gz | \
+  tar xzf - --strip-components=1
+
+COPY ./install-tomlplusplus.sh /build
+RUN ./install-tomlplusplus.sh

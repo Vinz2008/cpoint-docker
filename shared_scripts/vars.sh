@@ -2,6 +2,8 @@
 
 export GCC=9.5.0
 
+export MINGW_GCC=13.1.0
+
 #export CMAKE=3.20.3
 export CMAKE=3.29.5
 

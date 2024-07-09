@@ -4,6 +4,12 @@ set -ex
 
 source ./vars.sh
 
+mkdir gcc
+cd gcc
+curl -L https://ftp.gnu.org/gnu/gcc/gcc-$MINGW_GCC/gcc-$MINGW_GCC.tar.xz | \
+  tar xfJ - --strip-components=1
+cd ..
+
 mkdir llvm-project 
 cd llvm-project
 curl -L https://github.com/llvm/llvm-project/archive/$LLVM.tar.gz | \
